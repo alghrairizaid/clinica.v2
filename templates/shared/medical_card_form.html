@@ -1,0 +1,7 @@
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div>{{ form.history.label }} {{ form.history(class_='form-control') }}</div>
+    <div>{{ form.diagnoses.label }} {{ form.diagnoses(class_='form-control') }}</div>
+    <div>{{ form.lab_results.label }} {{ form.lab_results(class_='form-control') }}</div>
+    <div>{{ form.submit(class_='btn btn-primary') }}</div>
+</form> 

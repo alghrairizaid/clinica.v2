@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Manage Schedule for Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h2>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {% set days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+        <div class="form-group mb-3">
+            <label class="form-label">Working Days</label><br>
+            <ul class="list-unstyled mb-0">
+                {% for day in days %}
+                    <li class="mb-1">
+                        <input type="checkbox" class="form-check-input" name="working_days" id="day-{{ day }}" value="{{ day }}">
+                        <label class="form-check-label ms-2" for="day-{{ day }}">{{ day }}</label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="form-group mb-3">
+            {{ form.start_time.label(class="form-label") }}
+            {{ form.start_time(class="form-control", type="time") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.end_time.label(class="form-label") }}
+            {{ form.end_time(class="form-control", type="time") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Save Schedule</button>
+        <a href="{{ url_for('doctors_list') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+
+</div>
+<script>
+    var days_selected = {{ form.working_days.data|tojson|safe }};
+    if (days_selected) {
+        days_selected.forEach(function(day) {
+            var checkbox = document.getElementById('day-' + day);
+            if (checkbox) checkbox.checked = true;
+        });
+    }
+</script>
+{% endblock %} 

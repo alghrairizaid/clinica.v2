@@ -1,0 +1,11 @@
+<h3>Prescriptions</h3>
+{% for p in prescriptions %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <b>Recipe:</b> {{ p.recipe }}<br>
+            <b>Lab Referral:</b> {{ p.lab_referral }}
+        </div>
+    </div>
+{% else %}
+    <p>No prescriptions found.</p>
+{% endfor %} 

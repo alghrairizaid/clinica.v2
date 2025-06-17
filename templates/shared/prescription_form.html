@@ -1,0 +1,6 @@
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div>{{ form.recipe.label }} {{ form.recipe(class_='form-control') }}</div>
+    <div>{{ form.lab_referral.label }} {{ form.lab_referral(class_='form-control') }}</div>
+    <div>{{ form.submit(class_='btn btn-primary') }}</div>
+</form> 

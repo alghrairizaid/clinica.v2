@@ -1,0 +1,7 @@
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div>{{ form.doctor_id.label }} {{ form.doctor_id(class_='form-control') }}</div>
+    <div>{{ form.working_days.label }} {{ form.working_days(class_='form-control') }}</div>
+    <div>{{ form.time_slots.label }} {{ form.time_slots(class_='form-control') }}</div>
+    <div>{{ form.submit(class_='btn btn-primary') }}</div>
+</form> 

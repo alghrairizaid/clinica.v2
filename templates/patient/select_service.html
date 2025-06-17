@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Select Service Type</h4>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('book_appointment') }}">
+                <div class="form-group mb-3">
+                    <label for="service_type"><b>Service Type</b></label>
+                    <select class="form-control" id="service_type" name="service_type" required onchange="toggleServiceList()">
+                        <option value="">-- Select --</option>
+                        <option value="Medical Services" {% if patient.service_type == 'Medical Services' %}selected{% endif %}>Medical Services</option>
+                        <option value="Consultations" {% if patient.service_type == 'Consultations' %}selected{% endif %}>Consultations</option>
+                    </select>
+                </div>
+                <div id="services_list" class="form-group mb-3" style="display: none;">
+                    <label for="service_id"><b>Choose a Service</b></label>
+                    <select class="form-control" id="service_id" name="service_id">
+                        <option value="">-- Select Service --</option>
+                        {% for service in services %}
+                        <option value="{{ service.id }}">{{ service.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="doctors_list" class="form-group mb-3" style="display: none;">
+                    <label><b>Available Doctors</b></label>
+                    <ul class="list-group">
+                        {% for doctor in doctors %}
+                        <li class="list-group-item">Dr. {{ doctor.first_name }} {{ doctor.last_name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div id="consultations_appointment" class="form-group mb-3" style="display: none;">
+                    <hr>
+                    <h5>Book Consultation Appointment</h5>
+                    {% if error_message %}
+                        <div class="alert alert-danger">{{ error_message }}</div>
+                    {% endif %}
+                    <div class="form-group mb-3">
+                        {{ form.doctor_id.label(class="form-label") }}
+                        {{ form.doctor_id(class="form-select") }}
+                        {% for error in form.doctor_id.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.date.label(class="form-label") }}
+                        {{ form.date(class="form-control", type="date") }}
+                        {% for error in form.date.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group mb-3">
+                        {{ form.time.label(class="form-label") }}
+                        {{ form.time(class="form-control", type="time") }}
+                        {% for error in form.time.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+                </div>
+                <button type="submit" class="btn btn-success mt-3">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+function toggleServiceList() {
+    var type = document.getElementById('service_type').value;
+    document.getElementById('services_list').style.display = (type === 'Medical Services') ? 'block' : 'none';
+    document.getElementById('doctors_list').style.display = 'none';
+    document.getElementById('consultations_appointment').style.display = (type === 'Consultations') ? 'block' : 'none';
+}
+window.onload = toggleServiceList;
+</script>
+{% endblock %} 

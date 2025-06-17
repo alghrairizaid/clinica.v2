@@ -1,0 +1,12 @@
+<h3>Doctor Schedules</h3>
+{% for s in schedules %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <b>Doctor ID:</b> {{ s.doctor_id }}<br>
+            <b>Working Days:</b> {{ s.working_days }}<br>
+            <b>Time Slots:</b> {{ s.time_slots }}
+        </div>
+    </div>
+{% else %}
+    <p>No schedules found.</p>
+{% endfor %} 

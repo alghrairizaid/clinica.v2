@@ -1,0 +1,138 @@
+<!-- templates/patient/book_appointment.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Book Appointment</h4>
+                </div>
+                <div class="card-body">
+                    {% if step == 'service_type' %}
+                    <form method="POST">
+                        <div class="form-group mb-3">
+                            <label for="service_type"><b>Service Type</b></label>
+                            <select class="form-control" id="service_type" name="service_type" required>
+                                <option value="">-- Select --</option>
+                                <option value="Medical Services">Medical Services</option>
+                                <option value="Consultations">Consultations</option>
+                            </select>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-block">Next</button>
+                            <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary btn-block">Cancel</a>
+                        </div>
+                        {% if error_message %}
+                        <div class="alert alert-danger mt-3">{{ error_message }}</div>
+                        {% endif %}
+                    </form>
+                    {% elif step == 'details' %}
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="service_type" value="{{ service_type }}">
+                        {% if show_services %}
+                        <div class="form-group mb-3">
+                            {{ form.service_id.label(class="form-label") }}
+                            {{ form.service_id(class="form-select", id="service_id") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Service Fee</label>
+                            <input type="text" class="form-control" id="service_fee" readonly>
+                        </div>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const serviceSelect = document.getElementById('service_id');
+                            const feeInput = document.getElementById('service_fee');
+                            function updateServiceFee() {
+                                const serviceId = serviceSelect.value;
+                                if (serviceId) {
+                                    fetch(`/get_service_fee/${serviceId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.fee !== undefined && data.fee !== null) {
+                                                feeInput.value = `$${data.fee}`;
+                                            } else {
+                                                feeInput.value = 'Fee not available';
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            feeInput.value = 'Error loading fee';
+                                        });
+                                } else {
+                                    feeInput.value = '';
+                                }
+                            }
+                            serviceSelect.addEventListener('change', updateServiceFee);
+                            if (serviceSelect.value) {
+                                updateServiceFee();
+                            }
+                        });
+                        </script>
+                        {% endif %}
+                        {% if show_doctors %}
+                        <div class="form-group mb-3">
+                            {{ form.doctor_id.label(class="form-label") }}
+                            {{ form.doctor_id(class="form-select", id="doctor_id") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Consultation Fee</label>
+                            <input type="text" class="form-control" id="consultation_fee" readonly>
+                        </div>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const doctorSelect = document.getElementById('doctor_id');
+                            const feeInput = document.getElementById('consultation_fee');
+                            function updateFee() {
+                                const doctorId = doctorSelect.value;
+                                if (doctorId) {
+                                    fetch(`/get_doctor_fee/${doctorId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.fee) {
+                                                feeInput.value = `$${data.fee}`;
+                                            } else {
+                                                feeInput.value = 'Fee not available';
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            feeInput.value = 'Error loading fee';
+                                        });
+                                } else {
+                                    feeInput.value = '';
+                                }
+                            }
+                            doctorSelect.addEventListener('change', updateFee);
+                            if (doctorSelect.value) {
+                                updateFee();
+                            }
+                        });
+                        </script>
+                        {% endif %}
+                        <div class="form-group mb-3">
+                            {{ form.date.label(class="form-label") }}
+                            {{ form.date(class="form-control", type="date") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ form.time.label(class="form-label") }}
+                            {{ form.time(class="form-control", type="time") }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-block">Save</button>
+                            <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary btn-block">Cancel</a>
+                        </div>
+                        {% if error_message %}
+                        <div class="alert alert-danger mt-3">{{ error_message }}</div>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

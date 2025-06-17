@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    
+    <!-- Welcome Message -->
+    <div >
+        <h3 class="mb-0">Welcome {{ patient.first_name }}!</h3>
+    </div>
+    
+    <!-- Patient Information -->
+    <div class="card mb-4">
+        <div class="card-header">Patient Information</div>
+        <div class="card-body">
+            <p><b>Email:</b> {{ patient.email }}</p>
+            <p><b>Phone Number:</b> {{ patient.phone_number }}</p>
+            <p><b>Gender:</b> {{ patient.gender }}</p>
+            <p><b>Insurance Policy Number:</b> {{ patient.insurance_policy_number }}</p>
+        </div>
+    </div>
+
+    <h4>Your Appointments</h4>
+    {% if appointments %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Fee</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                <tr>
+                    <td>
+                        {% if appointment.doctor %}
+                            {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if appointment.service %}
+                            {{ appointment.service.name }}
+                        {% endif %}
+                    </td>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time.strftime('%H:%M') }}</td>
+                    <td>${{ appointment.fee }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no appointments scheduled.</p>
+    {% endif %}
+
+    <h4>Your Laboratories</h4>
+    {% if laboratories %}
+        <div class="row">
+            {% for lab in laboratories %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-flask me-2"></i>{{ lab.name }}</h5>
+                        <p class="card-text mb-1"><b>Test Types:</b> {{ lab.test_types }}</p>
+                        <p class="card-text mb-1"><b>Date:</b> {{ lab.date }}</p>
+                        <p class="card-text mb-1"><b>Time:</b> {{ lab.time }}</p>
+                        <p class="card-text mb-2"><b>Doctor:</b> Dr. {{ lab.doctor.first_name }} {{ lab.doctor.last_name }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have no laboratories assigned.</p>
+    {% endif %}
+
+    <h4>Your Lab Results</h4>
+    {% if lab_results %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Test Name</th>
+                    <th>Result</th>
+                    <th>Date</th>
+                    <th>Contacts</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lab in lab_results %}
+                <tr>
+                    <td>{{ lab.test_name }}</td>
+                    <td>{{ lab.result }}</td>
+                    <td>{{ lab.test_date }}</td>
+                    <td>{{ lab.lab_contacts }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You have no lab results.</p>
+    {% endif %}
+</div>
+{% endblock %}

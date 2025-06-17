@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>My Prescriptions</h2>
+    {% if prescriptions %}
+    <div class="row">
+        {% for prescription in prescriptions %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-user me-2"></i>{{ prescription.patient.first_name }} {{ prescription.patient.last_name }}</h5>
+                    <p class="card-text mb-1"><b>Prescription:</b> {{ prescription.recipe }}</p>
+                    {% if prescription.lab_referral %}
+                    <p class="card-text mb-1"><b>Lab Referral:</b> {{ prescription.lab_referral }}</p>
+                    {% endif %}
+                    <p class="card-text text-muted mb-0"><small>Created at: {{ prescription.created_at.strftime('%Y-%m-%d %H:%M') if prescription.created_at else '' }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card text-center p-4">
+        <div class="card-body">
+            <h5 class="card-title text-muted"><i class="fas fa-prescription"></i> No prescriptions found.</h5>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

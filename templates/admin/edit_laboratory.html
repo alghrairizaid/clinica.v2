@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Laboratory</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.test_types.label(class="form-label") }}
+            {{ form.test_types(class="form-control") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.date.label(class="form-label") }}
+            {{ form.date(class="form-control") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.time.label(class="form-label") }}
+            {{ form.time(class="form-control") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.doctor_id.label(class="form-label") }}
+            {{ form.doctor_id(class="form-select") }}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.patient_id.label(class="form-label") }}
+            {{ form.patient_id(class="form-select") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{{ url_for('view_laboratories') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %} 

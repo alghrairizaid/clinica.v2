@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Appointment Details</h2>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Appointment with {{ appointment.patient.first_name }} {{ appointment.patient.last_name }}
+        </div>
+        <div class="card-body">
+            <p><strong>Date:</strong> {{ appointment.date.strftime('%Y-%m-%d') }}</p>
+            <p><strong>Time:</strong> {{ appointment.time.strftime('%H:%M') }}</p>
+            <p><strong>Status:</strong> {{ appointment.status }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Patient Information
+        </div>
+        <div class="card-body">
+            <p><strong>Name:</strong> {{ patient.first_name }} {{ patient.last_name }}</p>
+            <p><strong>Email:</strong> {{ patient.email }}</p>
+            <p><strong>Phone:</strong> {{ patient.phone_number }}</p>
+            <p><strong>Gender:</strong> {{ patient.gender }}</p>
+            <p><strong>Insurance Policy Number:</strong> {{ patient.insurance_policy_number }}</p>
+            <!-- Link to Medical Card (if needed in a separate view) -->
+            {% if medical_card %}
+                <p><a href="{{ url_for('view_medical_card', patient_id=patient.id) }}">View Medical Card (Basic)</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Add Prescription
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ prescription_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ prescription_form.recipe.label(class="form-label") }}
+                    {{ prescription_form.recipe(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ prescription_form.lab_referral.label(class="form-label") }}
+                    {{ prescription_form.lab_referral(class="form-control") }}
+                </div>
+                <button type="submit" name="add_prescription" class="btn btn-primary mt-2">Add Prescription</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            Add Lab Result
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ lab_result_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ lab_result_form.name.label(class="form-label") }}
+                    {{ lab_result_form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ lab_result_form.result.label(class="form-label") }}
+                    {{ lab_result_form.result(class="form-control") }}
+                </div>
+                 <div class="form-group">
+                    {{ lab_result_form.contacts.label(class="form-label") }}
+                    {{ lab_result_form.contacts(class="form-control") }}
+                </div>
+                <button type="submit" name="add_lab_result" class="btn btn-primary mt-2">Add Lab Result</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %} 

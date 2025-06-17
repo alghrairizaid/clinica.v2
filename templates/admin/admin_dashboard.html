@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Clinic Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .card-body {
+        padding: 2rem;
+    }
+    .text-primary {
+        color: #3498db !important;
+    }
+    .text-success {
+        color: #2ecc71 !important;
+    }
+    .text-info {
+        color: #00bcd4 !important;
+    }
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+    }
+    .btn-success {
+        background-color: #2ecc71;
+        border-color: #2ecc71;
+    }
+    .btn-info {
+        background-color: #00bcd4;
+        border-color: #00bcd4;
+    }
+    .display-4 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Admin Dashboard
+                </h2>
+                <a href="{{ url_for('admin_search') }}" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h4 class="text-info">TOTAL DOCTORS</h4>
+                <div class="display-4">{{ doctors_count }}</div>
+                <a href="{{ url_for('doctors_list') }}" class="btn btn-primary mt-2">View All Doctors</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h4 class="text-success">TOTAL PATIENTS</h4>
+                <div class="display-4">{{ patients_count }}</div>
+                <a href="{{ url_for('patients_list') }}" class="btn btn-success mt-2">View All Patients</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h4 class="text-info">TOTAL APPOINTMENTS</h4>
+                <div class="display-4">{{ appointments_count }}</div>
+                <a href="{{ url_for('appointments') }}" class="btn btn-info mt-2">View All Appointments</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h4 class="text-primary">TOTAL SERVICES</h4>
+                <div class="display-4">{{ services_count }}</div>
+                <a href="{{ url_for('admin_services') }}" class="btn btn-primary mt-2">View All Services</a>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-md-4 offset-md-4">
+            <div class="dashboard-card text-center">
+                <h4 class="text-warning">TOTAL LABORATORIES</h4>
+                <div class="display-4">{{ laboratories_count if laboratories_count is defined else 0 }}</div>
+                <a href="{{ url_for('view_laboratories') }}" class="btn btn-warning mt-2">View All Laboratories</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary text-center">Quick Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-lg-3 mb-3">
+                            <div class="text-primary font-weight-bold text-uppercase mb-3">
+                                MANAGE DOCTORS
+                            </div>
+                            <a href="{{ url_for('add_doctor') }}" class="btn btn-primary">
+                                <i class="fas fa-user-md mr-2"></i>Add New Doctor
+                            </a>
+                        </div>
+                        <div class="col-lg-3 mb-3">
+                            <div class="text-info font-weight-bold text-uppercase mb-3">
+                                MANAGE PATIENTS
+                            </div>
+                            <a href="{{ url_for('add_patient') }}" class="btn btn-info">
+                                <i class="fas fa-user-plus mr-2"></i>Add New Patient
+                            </a>
+                        </div>
+                        <div class="col-lg-3 mb-3">
+                            <div class="text-warning font-weight-bold text-uppercase mb-3">
+                                APPOINTMENTS
+                            </div>
+                            <a href="{{ url_for('admin_book_appointment') }}" class="btn btn-warning">
+                                <i class="fas fa-calendar-plus mr-2"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <h3 class="h5 mb-3">Recent Appointments</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Date</th>
+                                <th>Service</th>
+                                <th>Doctor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in recent_appointments %}
+                            <tr>
+                                <td>{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</td>
+                                <td>{{ appointment.date.strftime('%Y-%m-%d') }} {{ appointment.time.strftime('%H:%M') }}</td>
+                                <td>
+                                    {% if appointment.service_id and appointment.service %}
+                                        {{ appointment.service.name }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if appointment.doctor %}
+                                        {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if appointment.status == 'pending' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif appointment.status == 'confirmed' %}
+                                        <span class="badge bg-success">Confirmed</span>
+                                    {% elif appointment.status == 'cancelled' %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% elif appointment.status == 'completed' %}
+                                        <span class="badge bg-info">Completed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="dashboard-card">
+                <h3 class="h5 mb-3">Recent Patients</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in recent_patients %}
+                            <tr>
+                                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                                <td>{{ patient.email }}</td>
+                                <td>{{ patient.phone_number }}</td>
+                                <td>{{ patient.created_at.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <h3 class="h5 mb-3"><i class="fas fa-flask me-2"></i>Recent Laboratories</h3>
+                {% if recent_laboratories and recent_laboratories|length > 0 %}
+                <div class="row">
+                    {% for lab in recent_laboratories %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="fas fa-flask me-2"></i>{{ lab.name }}</h5>
+                                <p class="card-text mb-1"><b>Test Types:</b> {{ lab.test_types }}</p>
+                                <p class="card-text mb-2"><b>Contacts:</b> {{ lab.contacts }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-2">
+                    <a href="{{ url_for('view_laboratories') }}" class="btn btn-warning">View All Laboratories</a>
+                </div>
+                {% else %}
+                <div class="card text-center p-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted"><i class="fas fa-flask"></i> No laboratories found.</h5>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

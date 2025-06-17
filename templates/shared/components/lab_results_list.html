@@ -1,0 +1,12 @@
+<h3>Lab Results</h3>
+{% for r in results %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <b>Name:</b> {{ r.name }}<br>
+            <b>Result:</b> {{ r.result }}<br>
+            <b>Contacts:</b> {{ r.contacts }}
+        </div>
+    </div>
+{% else %}
+    <p>No lab results found.</p>
+{% endfor %} 
