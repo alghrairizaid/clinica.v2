@@ -158,7 +158,7 @@ C:.
 - Flask-Migrate
 - Werkzeug
 
-> **Note:** If you don't have a `requirements.txt`, you can create one with the above packages.
+
 
 ## Installation
 1. **Clone the repository:**
@@ -217,4 +217,4 @@ Specify your license here.
 
 ## Contact
 For questions, suggestions, or support, please contact:
-- **Project Maintainer:** [Your Name] (<your.email@example.com>) 
+- **Project Maintainer:** Zaid Alghrairi (<zaid.alghrairi@mail.ru>) 
