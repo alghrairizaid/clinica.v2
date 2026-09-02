@@ -212,8 +212,6 @@ Contributions are welcome! To contribute:
 4. Push to your fork and submit a pull request.
 5. Please ensure your code follows the existing style and includes relevant tests if applicable.
 
-## License
-Specify your license here.
 
 ## Contact
 For questions, suggestions, or support, please contact:
